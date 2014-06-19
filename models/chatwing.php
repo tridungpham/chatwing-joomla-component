@@ -38,7 +38,6 @@ class ChatwingModelChatwing extends JModelLegacy
 
     $remoteData = curl_exec($ch);
     curl_close($ch);
-    // $remoteData = file_get_contents($queryUrl);
 
     if ($remoteData)
     {
