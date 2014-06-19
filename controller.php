@@ -60,5 +60,25 @@ class ChatwingController extends JControllerLegacy
     }
     $this->setRedirect('index.php?option=com_chatwing&view=apikey', $message, $hasError ? 'error' : 'message');
     $this->redirect();
-  }  
+  }
+
+  public function deleteKey()
+  {
+    JSession::checkToken() or die( 'Invalid Token' );
+    /**
+     * @var $configModel ChatwingModelConfig
+     */
+    $configModel = $this->getModel('config');
+    try
+    {
+      $hasError = !$configModel->saveKey();
+      $message  = JText::_('COM_CHATWING_MESSAGE_DELETE_KEY_SUCCESS');
+    } catch (Exception $ex)
+    {
+      $message  = CHATWING_DEBUG ? $ex->getMessage() : JText::_('COM_CHATWING_ERROR_CANNOT_DELETE_KEY');
+      $hasError = true;
+    }
+    $this->setRedirect('index.php?option=com_chatwing&view=apikey', $message, $hasError ? 'error' : 'message');
+    $this->redirect();
+  }
 }

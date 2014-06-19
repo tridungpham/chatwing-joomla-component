@@ -22,7 +22,7 @@ JHtml::_('behavior.formvalidation');
       }
 
       var deleteKey = function(){
-        if(confirm('<?php echo JText::_("COM_CHATWING_API_KEY_CHANGE_CONFIRM_MESSAGE") ?>')) {
+        if(confirm('<?php echo JText::_("COM_CHATWING_API_KEY_REMOVE_CONFIRM_MESSAGE") ?>')) {
           Joomla.submitform('deleteKey');
         }
       }
@@ -67,7 +67,7 @@ JHtml::_('behavior.formvalidation');
       </div>
       <?php if($this->api_key_set): ?>
       <div class="alert alert-block">
-        <button class="btn btn-danger">
+        <button class="btn btn-danger" onclick="deleteKey()">
           <i class="icon-remove"></i>
           <?php echo JText::_('COM_CHATWING_ACTION_REMOVE_API_KEY') ?>
         </button>

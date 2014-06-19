@@ -71,7 +71,7 @@ class ChatwingModelConfig extends JModelLegacy
    *
    * @return boolean return True on success, otherwise return False
    */
-  public function saveKey($apiKey)
+  public function saveKey($apiKey = '')
   {
     /**
      * @var $configTable ChatwingTableConfig
