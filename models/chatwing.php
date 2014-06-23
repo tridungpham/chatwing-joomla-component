@@ -9,7 +9,7 @@ class ChatwingModelChatwing extends JModelLegacy
   const TARGET_DOMAIN = 'staging.chatwing.com';
   
   // API action
-  const API_FETCH_CHATBOX_LIST = '/user/chatbox/list';
+  const API_ACTION_FETCH_CHATBOX_LIST = '/user/chatbox/list';
 
   private static $_cache = array();
 
@@ -21,7 +21,7 @@ class ChatwingModelChatwing extends JModelLegacy
    *
    * @return mixed|null
    */
-  public function fetchRemoteData($type = self::API_FETCH_CHATBOX_LIST, $params = array())
+  public function fetchRemoteData($type = self::API_ACTION_FETCH_CHATBOX_LIST, $params = array())
   {
     $configModel            = JModelLegacy::getInstance('config', 'chatwingModel');
     $apiKey                 = $configModel->getTokenKey();
@@ -73,9 +73,9 @@ class ChatwingModelChatwing extends JModelLegacy
    */
   public function getBoxList()
   {
-    if (isset(self::$_cache[self::API_FETCH_CHATBOX_LIST]) && self::$_cache[self::API_FETCH_CHATBOX_LIST])
+    if (isset(self::$_cache[self::API_ACTION_FETCH_CHATBOX_LIST]) && self::$_cache[self::API_ACTION_FETCH_CHATBOX_LIST])
     {
-      $data = self::$_cache[self::API_FETCH_CHATBOX_LIST];
+      $data = self::$_cache[self::API_ACTION_FETCH_CHATBOX_LIST];
     }
     else
     {
