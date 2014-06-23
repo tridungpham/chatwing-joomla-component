@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="3.2.0">
+<extension type="component" version="3.2.0" method="upgrade">
     <name>Chatwing</name>
     <creationDate>June 2014</creationDate>
     <author>Tri Dung Pham</author>
@@ -35,6 +35,7 @@
             <folder>models</folder>
             <folder>views</folder>
             <folder>language</folder>
+            <folder>media</folder>
         </files>
        <!--  <languages folder="admin">
             <language tag="en-GB">language/en-GB/en-GB.com_chatwing.ini</language>
