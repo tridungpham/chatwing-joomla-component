@@ -50,7 +50,11 @@ class ChatwingController extends JControllerLegacy
     $configModel = $this->getModel('config');
     try {
       $hasError = !$configModel->saveKey($newKey);
-      $message = JText::_('COM_CHATWING_MESSAGE_SAVE_KEY_SUCCESS');
+      if(!$hasError) {
+        $message = JText::_('COM_CHATWING_MESSAGE_SAVE_KEY_SUCCESS');
+      } else {
+        $message = JText::_('COM_CHATWING_MESSAGE_SAVE_KEY_SUCCESS');
+      }
     } catch (Exception $ex) {
       $message = CHATWING_DEBUG ? $ex->getMessage() : JText::_('COM_CHATWING_ERROR_CANNOT_SAVE_KEY');
       $hasError = true;

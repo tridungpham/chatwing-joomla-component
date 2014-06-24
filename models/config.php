@@ -32,6 +32,9 @@ class ChatwingModelConfig extends JModelLegacy
     {
       self::$_data = $result;
     }
+    if(isset($_data['api_key']['value'])) {
+      $_data['api_key']['value'] = base64_decode($_data['api_key']['value']);
+    }
   }
 
   /**
@@ -78,7 +81,7 @@ class ChatwingModelConfig extends JModelLegacy
      */
     $configTable = JTable::getInstance('config', 'chatwingtable');
     $configTable->load('api_key');
-    $data       = array('value' => $apiKey);
+    $data       = array('value' => base64_encode($apiKey));
     $saveResult = $configTable->save($data);
 
     return $saveResult;
