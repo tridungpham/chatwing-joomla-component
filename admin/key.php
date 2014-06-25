@@ -1,0 +1,1 @@
+<?php define("CHATWING_ENCRYPT_KEY", 'HONg5vNHGpzvnG6hA9ECYa5K5j9tM4'); ?>

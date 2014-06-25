@@ -30,11 +30,16 @@ class ChatwingModelConfig extends JModelLegacy
     $result = $db->loadAssocList('name');
     if ($result)
     {
+      foreach($result as &$row){
+        if(isset($row['value']) && $row['value']) {
+          $row['value'] = EncryptionHelper::decrypt(base64_decode($row['value']));
+        }
+      }
       self::$_data = $result;
     }
-    if(isset($_data['api_key']['value'])) {
-      $_data['api_key']['value'] = base64_decode($_data['api_key']['value']);
-    }
+    // if(isset($_data['api_key']['value'])) {
+    //   $_data['api_key']['value'] = EncryptionHelper::decrypt($_data['api_key']['value']);
+    // }
   }
 
   /**
@@ -81,7 +86,8 @@ class ChatwingModelConfig extends JModelLegacy
      */
     $configTable = JTable::getInstance('config', 'chatwingtable');
     $configTable->load('api_key');
-    $data       = array('value' => base64_encode($apiKey));
+    $data       = array('value' => base64_encode(EncryptionHelper::encrypt($apiKey)));
+
     $saveResult = $configTable->save($data);
 
     return $saveResult;
