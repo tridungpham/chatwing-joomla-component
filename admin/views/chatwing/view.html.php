@@ -17,6 +17,7 @@ class ChatwingViewChatwing extends JViewLegacy
   private function _prepareHeader()
   {
     JToolbarHelper::title(JText::_('COM_CHATWING_CHATBOX_LIST'));
+    JToolbarHelper::custom('settings', 'options', '', JText::_('COM_CHATWING_LABEL_BUTTON_SETTINGS'), false);
     JToolbarHelper::custom('apikey', 'options', '', JText::_('COM_CHATWING_LABEL_BUTTON_APIKEY'), false);
   }
 }

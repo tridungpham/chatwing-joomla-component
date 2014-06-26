@@ -7,6 +7,20 @@ defined('_JEXEC') or die;
 
 class ChatwingController extends JControllerLegacy
 {
+  public function __construct($config = array())
+  {
+    parent::__construct($config);
+    $configModel = $this->getModel('config');
+    $jInput = JFactory::getApplication()->input;
+    $viewName = $jInput->get('view');
+    // if user hasn't set the API key, then redirect user to the key form
+    if ((!$configModel->isTokenSet() && $viewName != 'apikey')) {
+      $this->setRedirect('index.php?option=com_chatwing&view=apikey');
+      $this->redirect();
+    }
+  }
+
+
   public function display($cachable = false, $urlparams = array())
   {
     /**
@@ -14,15 +28,18 @@ class ChatwingController extends JControllerLegacy
      */
     $configModel = $this->getModel('config');
     $jInput = JFactory::getApplication()->input;
-    $viewName = $jInput->get('view');
     $task = $jInput->get('task');
+    switch($task) {
+      case 'apikey':
+        $jInput->set('view', 'apikey');
+        break;
 
-    // if user hasn't set the API key, then redirect user to the key form
-    if ((!$configModel->isTokenSet() && $viewName != 'apikey') || $task == 'apikey') {
-      $this->setRedirect('index.php?option=com_chatwing&view=apikey');
-      $this->redirect();
+      case 'settings':
+        $jInput->set('view', 'settings');
+        break;
     }
-    $view = $this->getView($viewName, 'html');
+
+    $view = $this->getView($jInput->get('view'), 'html');
     $view->setModel($configModel); // set view's model so in view we can use it
 
     return parent::display();
@@ -78,6 +95,21 @@ class ChatwingController extends JControllerLegacy
       $hasError = true;
     }
     $this->setRedirect('index.php?option=com_chatwing&view=apikey', $message, $hasError ? 'error' : 'message');
+    $this->redirect();
+  }
+
+  public function saveSetting()
+  {
+    JSession::checkToken() or die('Invalid Token');
+    $configModel = $this->getModel('config');
+    try {
+      $hasError = !$configModel->saveSettings();
+      $message = JText::_('COM_CHATWING_MESSAGE_SAVE_SETTING_SUCCESS');
+    } catch (Exception $ex) {
+      $message = CHATWING_DEBUG ? $ex->getMessage() : JText::_('COM_CHATWING_ERROR_CANNOT_SAVE_SETTING');
+      $hasError = true;
+    }
+    $this->setRedirect('index.php?option=com_chatwing&view=settings', $message, $hasError ? 'error' : 'message');
     $this->redirect();
   }
 }

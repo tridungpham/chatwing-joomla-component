@@ -30,16 +30,17 @@ class ChatwingModelConfig extends JModelLegacy
     $result = $db->loadAssocList('name');
     if ($result)
     {
-      foreach($result as &$row){
+      foreach($result as $idx => &$row){
         if(isset($row['value']) && $row['value']) {
           $row['value'] = EncryptionHelper::decrypt(base64_decode($row['value']));
+        }
+
+        if($idx == 'settings') {
+          $result[$idx] = json_decode($row['value'], true);
         }
       }
       self::$_data = $result;
     }
-    // if(isset($_data['api_key']['value'])) {
-    //   $_data['api_key']['value'] = EncryptionHelper::decrypt($_data['api_key']['value']);
-    // }
   }
 
   /**
@@ -93,4 +94,30 @@ class ChatwingModelConfig extends JModelLegacy
     return $saveResult;
   }
 
+  public function saveSettings()
+  {
+    /**
+     * @var $configTable ChatwingTableConfig
+     */
+    $configTable = JTable::getInstance('config', 'chatwingtable');
+    $configTable->load('settings');
+
+    $data = array();
+    $jInput = JFactory::getApplication()->input;
+    $data['width'] = $jInput->get('width', 600);
+    $data['height'] = $jInput->get('height', 400);
+    $data = array('value' => base64_encode(EncryptionHelper::encrypt(json_encode($data))));
+
+    return $configTable->save($data);
+  }
+
+  public function getSetting($key = null) {
+    if(is_null($key)){
+      return self::$_data['settings'];
+    } elseif(isset(self::$_data['settings'][$key])){
+      return self::$_data['settings'][$key];
+    } else {
+      return null;
+    }
+  }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Author: dphamtri
+ * Author: chatwing
  */
 
 defined('_JEXEC') or die;

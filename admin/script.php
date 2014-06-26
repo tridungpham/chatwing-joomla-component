@@ -1,6 +1,6 @@
 <?php
 /**
- * Author: dphamtri
+ * Author: chatwing
  */
 defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 
