@@ -6,4 +6,4 @@ CREATE TABLE `#__chatwing_config` (
 PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `#__chatwing_config` VALUES('api_key', '');
+INSERT INTO `#__chatwing_config` VALUES('api_key', ''),('settings', '');
