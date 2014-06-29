@@ -25,3 +25,4 @@ class EncryptionHelper
     return $decrypted_string;
   }
 }
+

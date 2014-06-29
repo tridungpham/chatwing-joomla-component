@@ -1,5 +1,18 @@
 <?php
 
+if(!class_exists('EncryptionHelper')) {
+  require_once dirname(dirname(__FILE__)) . '/helpers/encryption.php';
+
+  // check if Encryption key file available
+  $keyFilePath = JPATH_ADMINISTRATOR . 'components' . DS . 'com_chatwing'. DS . 'key.php';
+  if(file_exists($keyFilePath)) {
+    include $keyFilePath;
+  }
+
+  defined('CHATWING_ENCRYPT_KEY') or define('CHATWING_ENCRYPT_KEY', '2014CHATWING!#@');
+  EncryptionHelper::setEncryptionKey(CHATWING_ENCRYPT_KEY);
+}
+
 /**
  * @author: Tri Dung Pham
  */
