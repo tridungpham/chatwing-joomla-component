@@ -1,5 +1,7 @@
 <?php
 
+JLoader::registerNamespace('Chatwing', CHATWING_EXTENSION_PATH . DS . 'lib' . DS . 'src');
+
 class ChatwingModelChatwing extends JModelLegacy
 {
   // API information
@@ -9,7 +11,7 @@ class ChatwingModelChatwing extends JModelLegacy
   const TARGET_DOMAIN = 'staging.chatwing.com';
   
   // API action
-  const API_ACTION_FETCH_CHATBOX_LIST = '/user/chatbox/list';
+  const API_ACTION_FETCH_CHATBOX_LIST = 'user/chatbox/list';
 
   private static $_cache = array();
 
@@ -25,30 +27,14 @@ class ChatwingModelChatwing extends JModelLegacy
   {
     $configModel            = JModelLegacy::getInstance('config', 'chatwingModel');
     $apiKey                 = $configModel->getTokenKey();
-    $params['access_token'] = $apiKey;
-    $queryUrl               = $this->buildQueryUrl($type, $params);
 
-    $ch    = curl_init();
-    $agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0';
-    // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_VERBOSE, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, $agent);
-    curl_setopt($ch, CURLOPT_URL, $queryUrl);
-
-    $remoteData = curl_exec($ch);
-    curl_close($ch);
-
-    if ($remoteData)
-    {
-      $remoteData          = json_decode($remoteData, true);
-      self::$_cache[$type] = $remoteData;
-
-      return $remoteData;
-    }
-    else
-    {
-      return null;
+    try {
+      $api = new Chatwing\Api($apiKey, self::CLIENT_ID);
+      $api->setEnv($api::ENV_DEVELOPMENT);
+      $response = $api->call('user/chatbox/list');
+      return $response;
+    } catch (\Chatwing\Exception\ChatwingException $e) {
+      die($e->getMessage()); // todo use another method to catch the error
     }
   }
 

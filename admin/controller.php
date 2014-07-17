@@ -13,8 +13,9 @@ class ChatwingController extends JControllerLegacy
     $configModel = $this->getModel('config');
     $jInput = JFactory::getApplication()->input;
     $viewName = $jInput->get('view');
+    $task = $jInput->get('task');
     // if user hasn't set the API key, then redirect user to the key form
-    if ((!$configModel->isTokenSet() && $viewName != 'apikey')) {
+    if ((!$configModel->isTokenSet() && $viewName != 'apikey' && $task != 'savekey')) {
       $this->setRedirect('index.php?option=com_chatwing&view=apikey');
       $this->redirect();
     }
@@ -51,7 +52,7 @@ class ChatwingController extends JControllerLegacy
    * @return void
    */
   public function saveKey()
-  {
+  {    
     JSession::checkToken() or die('Invalid Token');
     $newKey = JFactory::getApplication()->input->get('key');
     if (!$newKey) {

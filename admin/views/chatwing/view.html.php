@@ -2,11 +2,13 @@
 
 class ChatwingViewChatwing extends JViewLegacy
 {
-  public function display($tpl = null) {
+  public function display($tpl = null)
+  {
     $this->boxes = $this->get('BoxList');
     $this->_prepareHeader();
 
-    if(version_compare(JVERSION, '3.0', '<')) {
+    if (version_compare(JVERSION, '3.0', '<'))
+    {
       JFactory::getDocument()
         ->addStyleSheet(JURI::base() . 'components/com_chatwing/media/css/jbootstrap.min.css');
     }
