@@ -1,136 +1,142 @@
 <?php
 
-if(!class_exists('EncryptionHelper')) {
-  require_once dirname(dirname(__FILE__)) . '/helpers/encryption.php';
-
-  // check if Encryption key file available
-  $keyFilePath = JPATH_ADMINISTRATOR . 'components' . DS . 'com_chatwing'. DS . 'key.php';
-  if(file_exists($keyFilePath)) {
-    include $keyFilePath;
-  }
-
-  defined('CHATWING_ENCRYPT_KEY') or define('CHATWING_ENCRYPT_KEY', '2014CHATWING!#@');
-  EncryptionHelper::setEncryptionKey(CHATWING_ENCRYPT_KEY);
-}
-
 /**
- * @author: Tri Dung Pham
+ * @author: chatwing
+ * @package Sutunam_Joomla
  */
+
+//if (!class_exists('EncryptionHelper')) {
+//    require_once dirname(dirname(__FILE__)) . '/helpers/encryption.php';
+//    if(!defined('CHATWING_ENCRYPT_KEY')) {
+//        // check if Encryption key file available
+//        $keyFilePath = JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_chatwing' . DS . 'key.php';
+//
+//        if (file_exists($keyFilePath)) {
+//            include $keyFilePath;
+//        } else {
+//            // we still define a fake key,
+//            // so the module does not throw PHP error
+//            define('CHATWING_ENCRYPT_KEY', 'none');
+//            JFactory::getApplication()->enqueueMessage('No encryption key found', 'error');
+//        }
+//    }
+//}
+
 class ChatwingModelConfig extends JModelLegacy
 {
-  private static $_data = null;
+    private static $_data = null;
 
-  public function __construct()
-  {
-    parent::__construct();
-    if (is_null(self::$_data))
+    public function __construct()
     {
-      $this->_getConfigData();
+        parent::__construct();
+        if (is_null(self::$_data)) {
+            $this->_getConfigData();
+        }
     }
-  }
 
-  /**
-   * Get Config from DB and cache it
-   * @return  void
-   */
-  private function _getConfigData()
-  {
-    $db    = $this->getDbo();
-    $query = $db->getQuery(true);
-    $query->select('*');
-    $query->from($db->quoteName('#__chatwing_config'));
-    $db->setQuery($query);
-    $result = $db->loadAssocList('name');
-    if ($result)
+    /**
+     * Get Config from DB and cache it
+     * @return  void
+     */
+    private function _getConfigData()
     {
-      foreach($result as $idx => &$row){
-        if(isset($row['value']) && $row['value']) {
-          $row['value'] = EncryptionHelper::decrypt(base64_decode($row['value']));
+        $db = $this->getDbo();
+        $query = $db->getQuery(true);
+        $query->select('*');
+        $query->from($db->quoteName('#__chatwing_config'));
+        $db->setQuery($query);
+        $result = $db->loadAssocList('name');
+        if ($result) {
+            foreach ($result as $idx => &$row) {
+                if ($idx == 'settings') {
+                    $result[$idx] = json_decode($row['value'], true);
+                }
+
+                if (isset($row['value']) && $row['value']) {
+                    $row['value'] = EncryptionHelper::decrypt(base64_decode($row['value']));
+                }
+
+
+            }
+            self::$_data = $result;
+        }
+    }
+
+    /**
+     * Check if ChatWing API Token key is set
+     * @return boolean
+     */
+    public function isTokenSet()
+    {
+        if (is_null(self::$_data)) {
+            $this->_getConfigData();
         }
 
-        if($idx == 'settings') {
-          $result[$idx] = json_decode($row['value'], true);
+        if (self::$_data && isset(self::$_data['api_key']) && !empty(self::$_data['api_key']) && self::$_data['api_key']['value']) {
+            return true;
+        } else {
+            return false;
         }
-      }
-      self::$_data = $result;
-    }
-  }
-
-  /**
-   * Check if ChatWing API Token key is set
-   * @return boolean
-   */
-  public function isTokenSet()
-  {
-    if (is_null(self::$_data))
-    {
-      $this->_getConfigData();
     }
 
-    if (self::$_data && isset(self::$_data['api_key']) && !empty(self::$_data['api_key']) && self::$_data['api_key']['value'])
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
-
-  /**
-   * Get ChatWing API Access Key
-   * @return string|null 
-   */
-  public function getTokenKey()
-  {
-    return self::$_data && isset(self::$_data['api_key']) && !empty(self::$_data['api_key']) ? self::$_data['api_key']['value'] : null;
-  }
-
-  /**
-   * Save API Key to database
-   *
-   * @param  string $apiKey ChatWing API Key
-   *
-   * @return boolean return True on success, otherwise return False
-   */
-  public function saveKey($apiKey = '')
-  {
     /**
-     * @var $configTable ChatwingTableConfig
+     * Get ChatWing API Access Key
+     * @return string|null
      */
-    $configTable = JTable::getInstance('config', 'chatwingtable');
-    $configTable->load('api_key');
-    $data       = array('value' => base64_encode(EncryptionHelper::encrypt($apiKey)));
-
-    $saveResult = $configTable->save($data);
-
-    return $saveResult;
-  }
-
-  public function saveSettings()
-  {
-    /**
-     * @var $configTable ChatwingTableConfig
-     */
-    $configTable = JTable::getInstance('config', 'chatwingtable');
-    $configTable->load('settings');
-
-    $data = array();
-    $jInput = JFactory::getApplication()->input;
-    $data['width'] = $jInput->get('width', 600);
-    $data['height'] = $jInput->get('height', 400);
-    $data = array('value' => base64_encode(EncryptionHelper::encrypt(json_encode($data))));
-
-    return $configTable->save($data);
-  }
-
-  public function getSetting($key = null) {
-    if(is_null($key)){
-      return self::$_data['settings'];
-    } elseif(isset(self::$_data['settings'][$key])){
-      return self::$_data['settings'][$key];
-    } else {
-      return null;
+    public function getTokenKey()
+    {
+        return self::$_data && isset(self::$_data['api_key']) && !empty(self::$_data['api_key']) ? self::$_data['api_key']['value'] : null;
     }
-  }
+
+    /**
+     * Save API Key to database
+     *
+     * @param  string $apiKey ChatWing API Key
+     *
+     * @return boolean return True on success, otherwise return False
+     */
+    public function saveKey($apiKey = '')
+    {
+        /**
+         * @var $configTable ChatwingTableConfig
+         */
+        $configTable = JTable::getInstance('config', 'chatwingtable');
+        $configTable->load('api_key');
+        if ($apiKey) {
+            $apiKey = base64_encode(EncryptionHelper::encrypt($apiKey));
+        }
+        $data = array('value' => $apiKey);
+
+        $saveResult = $configTable->save($data);
+
+        return $saveResult;
+    }
+
+    public function saveSettings()
+    {
+        /**
+         * @var $configTable ChatwingTableConfig
+         */
+        $configTable = JTable::getInstance('config', 'chatwingtable');
+        $configTable->load('settings');
+
+        $data = array();
+        $jInput = JFactory::getApplication()->input;
+        $data['width'] = $jInput->get('width', 600);
+        $data['height'] = $jInput->get('height', 400);
+        $data = array('value' => base64_encode(EncryptionHelper::encrypt(json_encode($data))));
+
+        return $configTable->save($data);
+    }
+
+    public function getSetting($key = null)
+    {
+        if (is_null($key)) {
+            return self::$_data['settings'];
+        } elseif (isset(self::$_data['settings'][$key])) {
+            return self::$_data['settings'][$key];
+        } else {
+            return null;
+        }
+    }
 }

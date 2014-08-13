@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="3.2.0" method="upgrade">
+<extension type="component" version="3.2.0">
     <name>Chatwing</name>
     <creationDate>June 2014</creationDate>
     <author>Tri Dung Pham</author>
@@ -7,7 +7,7 @@
     <authorUrl>http://bloglaptrinh.vn</authorUrl>
     <copyright>Copyright Info</copyright>
     <license>License Info</license>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <description>Component part for chatWing extension</description>
     <scriptfile>script.php</scriptfile>
     <install> <!-- Runs on install -->
@@ -24,7 +24,7 @@
         <schemas>
             <schemapath type="mysql">sql/updates/mysql</schemapath>
         </schemas>
-    </update> 
+    </update>
     <administration>
         <menu>COM_CHATWING_MENU_CHATWING</menu>
         <files folder="admin">
@@ -39,9 +39,14 @@
             <folder>media</folder>
             <folder>helpers</folder>
         </files>
-       <!--  <languages folder="admin">
-            <language tag="en-GB">language/en-GB/en-GB.com_chatwing.ini</language>
-            <language tag="en-GB">language/en-GB/en-GB.com_chatwing.sys.ini</language>
-        </languages>          -->       
+        <!--  <languages folder="admin">
+             <language tag="en-GB">language/en-GB/en-GB.com_chatwing.ini</language>
+             <language tag="en-GB">language/en-GB/en-GB.com_chatwing.sys.ini</language>
+         </languages>          -->
     </administration>
+    <updateservers>
+        <server type="extension" priority="1" name="Chatwing Joomla component update">
+            http://updates.chatwing.local/com_chatwing.xml
+        </server>
+    </updateservers>
 </extension>

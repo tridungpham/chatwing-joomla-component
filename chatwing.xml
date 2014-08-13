@@ -7,7 +7,7 @@
     <authorUrl>http://bloglaptrinh.vn</authorUrl>
     <copyright>Copyright Info</copyright>
     <license>License Info</license>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <description>Component part for chatWing extension</description>
     <scriptfile>script.php</scriptfile>
     <install> <!-- Runs on install -->
@@ -44,4 +44,7 @@
             <language tag="en-GB">language/en-GB/en-GB.com_chatwing.sys.ini</language>
         </languages>          -->       
     </administration>
+     <updateservers>
+        <server type="extension" priority="1" name="Chatwing Joomla component update">http://updates.chatwing.local/com_chatwing.xml</server>
+    </updateservers>
 </extension>
