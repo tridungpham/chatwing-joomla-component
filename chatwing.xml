@@ -24,7 +24,7 @@
         <schemas>
             <schemapath type="mysql">sql/updates/mysql</schemapath>
         </schemas>
-    </update> 
+    </update>
     <administration>
         <menu>COM_CHATWING_MENU_CHATWING</menu>
         <files folder="admin">
@@ -38,13 +38,16 @@
             <folder>language</folder>
             <folder>media</folder>
             <folder>helpers</folder>
+            <folder>lib</folder>
         </files>
-       <!--  <languages folder="admin">
-            <language tag="en-GB">language/en-GB/en-GB.com_chatwing.ini</language>
-            <language tag="en-GB">language/en-GB/en-GB.com_chatwing.sys.ini</language>
-        </languages>          -->       
+        <!--  <languages folder="admin">
+             <language tag="en-GB">language/en-GB/en-GB.com_chatwing.ini</language>
+             <language tag="en-GB">language/en-GB/en-GB.com_chatwing.sys.ini</language>
+         </languages>          -->
     </administration>
-     <updateservers>
-        <server type="extension" priority="1" name="Chatwing Joomla component update">http://updates.chatwing.local/com_chatwing.xml</server>
+    <updateservers>
+        <server type="extension" priority="1" name="Chatwing Joomla component update">
+            http://updates.chatwing.local/com_chatwing.xml
+        </server>
     </updateservers>
 </extension>
