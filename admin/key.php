@@ -1,1 +1,1 @@
-<?php define("CHATWING_ENCRYPT_KEY", 'Rkvhs3vlgtnLsoUhEdAQ'); ?>
+<?php define("CW_ENCRYPTION_KEY", 'Rkvhs3vlgtnLsoUhEdAQ'); ?>

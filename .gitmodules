@@ -1,3 +1,0 @@
-[submodule "admin/lib"]
-	path = admin/lib
-	url = git@github.com:chatwing/php-sdk.git

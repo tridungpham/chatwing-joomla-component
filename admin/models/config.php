@@ -5,23 +5,6 @@
  * @package Sutunam_Joomla
  */
 
-//if (!class_exists('EncryptionHelper')) {
-//    require_once dirname(dirname(__FILE__)) . '/helpers/encryption.php';
-//    if(!defined('CHATWING_ENCRYPT_KEY')) {
-//        // check if Encryption key file available
-//        $keyFilePath = JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_chatwing' . DS . 'key.php';
-//
-//        if (file_exists($keyFilePath)) {
-//            include $keyFilePath;
-//        } else {
-//            // we still define a fake key,
-//            // so the module does not throw PHP error
-//            define('CHATWING_ENCRYPT_KEY', 'none');
-//            JFactory::getApplication()->enqueueMessage('No encryption key found', 'error');
-//        }
-//    }
-//}
-
 class ChatwingModelConfig extends JModelLegacy
 {
     private static $_data = null;

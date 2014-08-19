@@ -1,9 +1,10 @@
 <?php
 
-defined('CHATWING_EXTENSION_PATH') or define('CHATWING_EXTENSION_PATH', JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_chatwing');
-
-JLoader::registerNamespace('Chatwing', CHATWING_EXTENSION_PATH . DS . 'lib' . DS . 'src');
-
+/**
+ * @author chatwing
+ * @package Chatwing_Joomla
+ * Class ChatwingModelChatwing
+ */
 class ChatwingModelChatwing extends JModelLegacy
 {
     // API information
@@ -12,6 +13,7 @@ class ChatwingModelChatwing extends JModelLegacy
 
     /**
      * Get list of chat boxes
+     * @throws Exception
      * @return array
      */
     public function getBoxList()
@@ -20,27 +22,18 @@ class ChatwingModelChatwing extends JModelLegacy
         $apiKey = $configModel->getTokenKey();
 
         try {
-            $api = new Chatwing\Api(self::CLIENT_ID);
-            $api->setAPIVersion(self::API_VERSION);
-            $api->setAccessToken($apiKey);
-            $api->setEnv(CHATWING_DEBUG ? Chatwing\Api::ENV_DEVELOPMENT : Chatwing\Api::ENV_PRODUCTION);
-            $response = $api->call('user/chatbox/list');
+            $container = JFactory::getApplication()->get('cw_container');
+            if (!$container) {
+                throw new \Chatwing\Exception\ChatwingException(array('message' => JText::_('COM_CHATWING_ERROR_UNKNOWN')));
+            }
+            $container['api']->setAccessToken($apiKey);
+            $response = $container['api']->call('user/chatbox/list');
         } catch (\Chatwing\Exception\ChatwingException $e) {
-            $message = CHATWING_DEBUG ? $e->getMessage() : JText::_('COM_CHATWING_ERROR_INVALID_RESPONSE');
+            $message = CW_DEBUG ? $e->getMessage() : JText::_('COM_CHATWING_ERROR_INVALID_RESPONSE');
             JFactory::getApplication()->enqueueMessage($message, 'error');
             return array();
         }
 
         return array_key_exists('data', $response) ? $response['data'] : array();
-    }
-
-    /**
-     * Build the URL of a chat box
-     * @param  string $key
-     * @return string
-     */
-    public function getBoxUrl($key)
-    {
-        return 'http://' . self::TARGET_DOMAIN . '/chatbox/' . $key;
     }
 }

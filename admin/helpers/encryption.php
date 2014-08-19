@@ -6,7 +6,7 @@ class EncryptionHelper
     {
         $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
         $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-        $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, CHATWING_ENCRYPT_KEY, $text, MCRYPT_MODE_ECB, $iv);
+        $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, CW_ENCRYPTION_KEY, $text, MCRYPT_MODE_ECB, $iv);
         return $encrypted_string;
     }
 
@@ -14,7 +14,7 @@ class EncryptionHelper
     {
         $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
         $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-        $decrypted_string = mcrypt_decrypt(MCRYPT_BLOWFISH, CHATWING_ENCRYPT_KEY, $text, MCRYPT_MODE_ECB, $iv);
+        $decrypted_string = mcrypt_decrypt(MCRYPT_BLOWFISH, CW_ENCRYPTION_KEY, $text, MCRYPT_MODE_ECB, $iv);
         return $decrypted_string;
     }
 
@@ -23,7 +23,7 @@ class EncryptionHelper
         $randomKey = self::generateKey(20);
         $targetDir = dirname($filePath);
         if (is_writable($targetDir)) {
-            file_put_contents($filePath, '<?php define("CHATWING_ENCRYPT_KEY", \'' . $randomKey . '\'); ?>');
+            file_put_contents($filePath, '<?php define("CW_ENCRYPTION_KEY", \'' . $randomKey . '\'); ?>');
         }
     }
 

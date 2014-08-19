@@ -19,6 +19,7 @@ class ChatwingController extends JControllerLegacy
                 && $jInput->get('tpl') == 'newkey')
         ) {
             if ((defined('CHATWING_RESET_KEY') || !$isTokenSet)) {
+                // encryption key changed, so we must save new settings
                 if ($isTokenSet) {
                     $this->configModel->saveKey();
                 }
@@ -29,7 +30,7 @@ class ChatwingController extends JControllerLegacy
     }
 
 
-    public function display()
+    public function display($cachable = false, $urlparams = array())
     {
         $jInput = JFactory::getApplication()->input;
         $view = $this->getView($jInput->get('view'), 'html');
@@ -72,7 +73,7 @@ class ChatwingController extends JControllerLegacy
                 $message = JText::_('COM_CHATWING_MESSAGE_SAVE_KEY_SUCCESS');
             }
         } catch (Exception $ex) {
-            $message = CHATWING_DEBUG ? $ex->getMessage() : JText::_('COM_CHATWING_ERROR_CANNOT_SAVE_KEY');
+            $message = CW_DEBUG ? $ex->getMessage() : JText::_('COM_CHATWING_ERROR_CANNOT_SAVE_KEY');
             $hasError = true;
         }
         $this->setRedirect('index.php?option=com_chatwing&view=apikey', $message, $hasError ? 'error' : 'message');
@@ -90,7 +91,7 @@ class ChatwingController extends JControllerLegacy
             $hasError = !$configModel->saveKey();
             $message = JText::_('COM_CHATWING_MESSAGE_DELETE_KEY_SUCCESS');
         } catch (Exception $ex) {
-            $message = CHATWING_DEBUG ? $ex->getMessage() : JText::_('COM_CHATWING_ERROR_CANNOT_DELETE_KEY');
+            $message = CW_DEBUG ? $ex->getMessage() : JText::_('COM_CHATWING_ERROR_CANNOT_DELETE_KEY');
             $hasError = true;
         }
         $this->setRedirect('index.php?option=com_chatwing&view=apikey', $message, $hasError ? 'error' : 'message');
@@ -105,7 +106,7 @@ class ChatwingController extends JControllerLegacy
             $hasError = !$configModel->saveSettings();
             $message = JText::_('COM_CHATWING_MESSAGE_SAVE_SETTING_SUCCESS');
         } catch (Exception $ex) {
-            $message = CHATWING_DEBUG ? $ex->getMessage() : JText::_('COM_CHATWING_ERROR_CANNOT_SAVE_SETTING');
+            $message = CW_DEBUG ? $ex->getMessage() : JText::_('COM_CHATWING_ERROR_CANNOT_SAVE_SETTING');
             $hasError = true;
         }
         $this->setRedirect('index.php?option=com_chatwing&view=settings', $message, $hasError ? 'error' : 'message');

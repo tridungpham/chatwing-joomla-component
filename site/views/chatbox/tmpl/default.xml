@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_CHATWING_VIEWS_CHATBOX" option="com_weblinks_category_view_default_option">
+
+    </layout>
+
+    <fields name="params">
+        <fieldset name="basic" label="Chatwing options" addfieldpath="/administrator/components/com_chatwing/models/fields">
+            <field name="alias" type="chatbox" label="Select chatbox"/>
+            <field name="width" type="text" label="Width" />
+            <field name="height" type="text" label="Height" />
+            <field name="custom_login_enable" type="radio" default="0" label="Enable custom login ?">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </field>
+            <field name="custom_login_secret" type="text" label="Secret" />
+        </fieldset>
+    </fields>
+</metadata>
